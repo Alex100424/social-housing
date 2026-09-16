@@ -3,17 +3,17 @@ USE social_housing;
 
 CREATE TABLE IF NOT EXISTS City (
     city_id INT AUTO_INCREMENT PRIMARY KEY,
-    city_name VARCHAR(200) NOT NULL
+    city_name VARCHAR(200) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Platform (
     platform_id INT AUTO_INCREMENT PRIMARY KEY,
-    platform_name VARCHAR(100) NOT NULL
+    platform_name VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Regulation (
     regulation_id INT AUTO_INCREMENT PRIMARY KEY,
-    regulation_name VARCHAR(200) NOT NULL
+    regulation_name VARCHAR(200) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS CityStatistics (
