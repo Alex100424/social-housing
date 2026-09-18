@@ -41,14 +41,20 @@ INSERT INTO RentalListing (
     price_amount,
     price_period,
     snapshot_date
-)
+) 
 VALUES
     (1, 1, 'Short-term', 120.00, 'per night', '2026-09-16'),
     (1, 2, 'Long-term', 1300.00, 'per month', '2026-09-16'),
     (2, 1, 'Short-term', 145.00, 'per night', '2026-09-16'),
     (2, 3, 'Short-term', 80.00, 'per night', '2026-09-16'),
     (3, 1, 'Long-term', 1050.00, 'per month', '2026-09-16'),
-    (4, 2, 'Short-term', 110.00, 'per night', '2026-09-16');
+    (4, 2, 'Short-term', 110.00, 'per night', '2026-09-16'),
+    (1, 1, 'Short-term', 120.00, 'per night', '2025-09-16'),
+    (1, 2, 'Long-term', 1300.00, 'per month', '2025-09-16'),
+    (2, 1, 'Short-term', 145.00, 'per night', '2025-09-16'),
+    (2, 3, 'Short-term', 80.00, 'per night', '2025-09-16'),
+    (3, 1, 'Long-term', 1050.00, 'per month', '2025-09-16'),
+    (4, 2, 'Short-term', 110.00, 'per night', '202-09-16');
 
 
 -- Add regulations to cities

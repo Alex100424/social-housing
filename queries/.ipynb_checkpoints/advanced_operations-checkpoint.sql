@@ -31,38 +31,3 @@ JOIN cities c
 GROUP BY c.city_id, c.city_name
 HAVING COUNT(DISTINCT h.household_id) >= 3
 ORDER BY average_rent_income_percentage DESC;
-
--- Calculates the average rental price of the listings of each city from the year 2025
--- and compares it to the percentage of homelesness in that city in that year, 
--- ordered from highest to lowest homelessness average
-
-SELECT
-    c.city_name,
-    ROUND(
-        AVG(
-            CASE
-                WHEN rl.price_period = 'per night'
-                    THEN rl.price_amount * 30
-                WHEN rl.price_period = 'per month'
-                    THEN rl.price_amount
-            END), 2
-    ) AS average_monthly_rental_price,
-    (cs.homeless_count * 100.0 / cs.population)
-        AS homelessness_percentage
-FROM City c
-JOIN CityStatistics cs
-    ON c.city_id = cs.city_id
-JOIN RentalListing rl
-    ON c.city_id = rl.city_id
-WHERE cs.year = 2025
-  AND rl.snapshot_date >= '2025-01-01'
-  AND rl.snapshot_date < '2026-01-01'
-GROUP BY
-    c.city_id,
-    c.city_name,
-    cs.year,
-    cs.population,
-    cs.homeless_count
-ORDER BY homelessness_percentage DESC;
-
-
