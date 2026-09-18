@@ -42,13 +42,6 @@ FROM City c
 JOIN CityStatistics cs
     ON c.city_id = cs.city_id
 ORDER BY c.city_name, cs.year;
-    ) AS average_rent_income_percentage
-FROM households h
-JOIN cities c
-    ON h.city_id = c.city_id
-GROUP BY c.city_id, c.city_name
-HAVING COUNT(DISTINCT h.household_id) >= 3
-ORDER BY average_rent_income_percentage DESC;
 
 -- Calculates the average rental price of the listings of each city from the year 2025
 -- and compares it to the percentage of homelesness in that city in that year, 
