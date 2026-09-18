@@ -14,16 +14,34 @@ JOIN CityStatistics cs
 WHERE cs.year = 2025
 ORDER BY social_housing_percentage DESC;
 
---calculates the average rent to income ratio for each city and finds cities where housing is less affordable buy in large
+
+--for each city, calculates the year by year percent change 
+--in average rent and homeless count, and shows how many regulations are currently active (no end date) in that city
 
 SELECT
     c.city_name,
-    COUNT(DISTINCT h.household_id) AS number_of_households,
-    ROUND(AVG(h.monthly_rent), 2) AS average_monthly_rent,
-    ROUND(AVG(h.monthly_income), 2) AS average_monthly_income,
+    cs.year,
+    cs.avg_rent,
     ROUND(
-        AVG((h.monthly_rent / NULLIF(h.monthly_income, 0)) * 100),
+        (cs.avg_rent - LAG(cs.avg_rent) OVER (PARTITION BY cs.city_id ORDER BY cs.year))
+        / NULLIF(LAG(cs.avg_rent) OVER (PARTITION BY cs.city_id ORDER BY cs.year), 0) * 100,
         2
+    ) AS rent_yoy_change_pct,
+    cs.homeless_count,
+    ROUND(
+        (cs.homeless_count - LAG(cs.homeless_count) OVER (PARTITION BY cs.city_id ORDER BY cs.year))
+        / NULLIF(LAG(cs.homeless_count) OVER (PARTITION BY cs.city_id ORDER BY cs.year), 0) * 100,
+        2
+    ) AS homeless_yoy_change_pct,
+    (
+        SELECT COUNT(*)
+        FROM CityRegulation cr
+        WHERE cr.city_id = c.city_id AND cr.end_date IS NULL
+    ) AS active_regulations_count
+FROM City c
+JOIN CityStatistics cs
+    ON c.city_id = cs.city_id
+ORDER BY c.city_name, cs.year;
     ) AS average_rent_income_percentage
 FROM households h
 JOIN cities c
