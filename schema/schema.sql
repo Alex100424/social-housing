@@ -30,12 +30,17 @@ CREATE TABLE IF NOT EXISTS CityStatistics (
 );
 
 CREATE TABLE IF NOT EXISTS RentalListing (
-    listing_id INT AUTO_INCREMENT PRIMARY KEY,
+    listing_id BIGINT PRIMARY KEY,
     city_id INT NOT NULL,
     platform_id INT NOT NULL,
-    rental_type VARCHAR(100),
+    host_id BIGINT NULL,
+    neighbourhood VARCHAR(20) NOT NULL,
+    rental_type VARCHAR(100) NOT NULL,
+    room_type VARCHAR(20) NOT NULL
     price_amount DECIMAL(10,2),
     price_period VARCHAR(30),
+    availability_365 INT NOT NULL,
+    license TEXT NULL,
     snapshot_date DATE,
 
     FOREIGN KEY (city_id) REFERENCES City(city_id),
