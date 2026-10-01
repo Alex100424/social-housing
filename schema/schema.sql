@@ -1,6 +1,8 @@
 CREATE DATABASE IF NOT EXISTS social_housing;
 USE social_housing;
 
+SHOW TABLES;
+
 CREATE TABLE IF NOT EXISTS City (
     city_id INT AUTO_INCREMENT PRIMARY KEY,
     city_name VARCHAR(200) NOT NULL UNIQUE
@@ -24,6 +26,7 @@ CREATE TABLE IF NOT EXISTS CityStatistics (
     social_housing_units INT,
     avg_rent DECIMAL(10,2),
     homeless_count INT,
+    total_households INT,
 
     PRIMARY KEY (city_id, year),
     FOREIGN KEY (city_id) REFERENCES City(city_id)

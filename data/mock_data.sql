@@ -1,5 +1,10 @@
 --Add cities
 
+-- USE social_housing;
+
+-- ALTER TABLE CityStatistics
+--     ADD COLUMN total_households INT;
+
 INSERT INTO City (city_name)
 VALUES ('Madrid'), ('Barcelona'), ('Valencia'), ('Seville');
 
