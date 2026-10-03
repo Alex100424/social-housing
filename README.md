@@ -48,3 +48,7 @@ Main tables:
 - Purpose in our project: annual household counts and average monthly rent in Spanish cities.
 - Cleaning: Selected 100 unique city–year records after cleaning. Translated column names and indicator labels into English, standardised city names and converted Spanish number formatting into numeric values.
 - Data integration: scripts/import_ine.py generates data/import_ine.sql. It adds missing cities to City and inserts their statistics into CityStatistics. Existing city–year records have their household count and average rent updated.
+
+## Video Presentation for Customers
+
+[![Watch the video](https://img.youtube.com/vi/G_VoenXHS-U/0.jpg)](https://youtu.be/G_VoenXHS-U)
