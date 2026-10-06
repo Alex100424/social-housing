@@ -1,4 +1,4 @@
---Calculates the percentage of social housing in each city for 2025 
+--Calculates the percentage of social housing in each city for 2024 
 --and compares it with the number of homeless people, ordered from highest to lowest social housing percentage
 
 SELECT
@@ -11,7 +11,7 @@ SELECT
 FROM City c
 JOIN CityStatistics cs
     ON c.city_id = cs.city_id
-WHERE cs.year = 2025
+WHERE cs.year = 2024
 ORDER BY social_housing_percentage DESC;
 
 

@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS CityStatistics (
 );
 
 CREATE TABLE IF NOT EXISTS RentalListing (
-    listing_id BIGINT PRIMARY KEY,
+    listing_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     city_id INT NOT NULL,
     platform_id INT NOT NULL,
     host_id BIGINT NULL,

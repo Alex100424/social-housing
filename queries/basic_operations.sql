@@ -61,3 +61,12 @@ WHERE city_id = 3 AND regulation_id = 2;
 
 DELETE FROM CityStatistics
 WHERE city_id = 1 AND year = 2024;
+
+-- Show tables
+SHOW TABLES FROM social_housing;
+
+-- Drop the database
+-- DROP DATABASE IF EXISTS social_housing;
+
+-- Drop rental listing
+-- DROP TABLE RentalListing;

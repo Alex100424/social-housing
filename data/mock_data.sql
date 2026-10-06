@@ -1,6 +1,6 @@
---Add cities
+USE social_housing;
 
--- USE social_housing;
+-- Add cities
 
 -- ALTER TABLE CityStatistics
 --     ADD COLUMN total_households INT;
@@ -37,29 +37,31 @@ VALUES
     (3, 2024, 930000, 470000, 55000, 1600.00, 2500),
     (3, 2025, 940000, 475000, 56000, 1680.00, 2600);
 
+-- Mock rental listings disabled: they conflict with the NOT NULL columns in RentalListing.
+-- The real listings are loaded by import_airbnb.sql instead.
 
--- Add rental listings
-INSERT INTO RentalListing (
-    city_id,
-    platform_id,
-    rental_type,
-    price_amount,
-    price_period,
-    snapshot_date
-) 
-VALUES
-    (1, 1, 'Short-term', 120.00, 'per night', '2026-09-16'),
-    (1, 2, 'Long-term', 1300.00, 'per month', '2026-09-16'),
-    (2, 1, 'Short-term', 145.00, 'per night', '2026-09-16'),
-    (2, 3, 'Short-term', 80.00, 'per night', '2026-09-16'),
-    (3, 1, 'Long-term', 1050.00, 'per month', '2026-09-16'),
-    (4, 2, 'Short-term', 110.00, 'per night', '2026-09-16'),
-    (1, 1, 'Short-term', 120.00, 'per night', '2025-09-16'),
-    (1, 2, 'Long-term', 1300.00, 'per month', '2025-09-16'),
-    (2, 1, 'Short-term', 145.00, 'per night', '2025-09-16'),
-    (2, 3, 'Short-term', 80.00, 'per night', '2025-09-16'),
-    (3, 1, 'Long-term', 1050.00, 'per month', '2025-09-16'),
-    (4, 2, 'Short-term', 110.00, 'per night', '202-09-16');
+-- Add data into the rental listings
+-- INSERT INTO RentalListing (
+--    city_id,
+--    platform_id,
+--    rental_type,
+--    price_amount,
+--    price_period,
+--    snapshot_date
+-- ) 
+-- VALUES
+--    (1, 1, 'Short-term', 120.00, 'per night', '2026-09-16'),
+--    (1, 2, 'Long-term', 1300.00, 'per month', '2026-09-16'),
+--    (2, 1, 'Short-term', 145.00, 'per night', '2026-09-16'),
+--    (2, 3, 'Short-term', 80.00, 'per night', '2026-09-16'),
+--    (3, 1, 'Long-term', 1050.00, 'per month', '2026-09-16'),
+--    (4, 2, 'Short-term', 110.00, 'per night', '2026-09-16'),
+--    (1, 1, 'Short-term', 120.00, 'per night', '2025-09-16'),
+--    (1, 2, 'Long-term', 1300.00, 'per month', '2025-09-16'),
+--    (2, 1, 'Short-term', 145.00, 'per night', '2025-09-16'),
+--    (2, 3, 'Short-term', 80.00, 'per night', '2025-09-16'),
+--    (3, 1, 'Long-term', 1050.00, 'per month', '2025-09-16'),
+--    (4, 2, 'Short-term', 110.00, 'per night', '2025-09-16');
 
 
 -- Add regulations to cities
@@ -76,3 +78,9 @@ VALUES
     (2, 3, '2024-01-01', NULL),
     (3, 2, '2022-01-01', NULL);
 
+-- Check: row counts after loading
+   SELECT 'City' AS tbl, COUNT(*) AS n FROM City
+   UNION ALL SELECT 'Platform', COUNT(*) FROM Platform
+   UNION ALL SELECT 'Regulation', COUNT(*) FROM Regulation
+   UNION ALL SELECT 'CityStatistics', COUNT(*) FROM CityStatistics
+   UNION ALL SELECT 'CityRegulation', COUNT(*) FROM CityRegulation;
