@@ -77,3 +77,45 @@ GROUP BY
 ORDER BY homelessness_percentage DESC;
 
 
+
+-- Author: Alex100424
+-- Question: Which neighbourhoods have the highest average nightly Airbnb prices?
+-- Relevance to the societal problem: This helps identify areas where short-term accomodation is especially expensive and can be 
+-- compared with broader housing affordability patters across the city.
+
+SELECT
+    c.city_name,
+    rl.neighbourhood,
+    COUNT(rl.listing_id) AS number_of_listings,
+    ROUND(AVG(rl.price_amount), 2) AS average_nightly_price
+FROM RentalListing rl
+JOIN City c
+    ON rl.city_id = c.city_id
+JOIN Platform p
+    ON rl.platform_id = p.platform_id
+WHERE p.platform_name = 'Airbnb'
+AND rl.price_period = 'Night'
+GROUP BY c.city_name, rl.neighbourhood
+HAVING COUNT(rl.listing_id) >= 2
+ORDER BY average_nightly_price DESC;
+
+
+-- Author: Alex100424
+-- Question: Which Airbnb rooms are the most common, and what is their average nightly price?
+-- Relevance to the societal probelem: This helps show whether the short-term market is mainly made up of entire homes, private
+-- rooms or hotel rooms, which is relevant when considering how tourists may affect housing availability for local residents.
+
+SELECT 
+    c.city_name,
+    rl.room_type,
+    COUNT(rl.listing_id) AS number_of_listings,
+    ROUND(AVG(price_amount), 2) AS average_nightly_price
+FROM RentalListing rl
+JOIN City c
+    ON rl.city_id = c.city_id
+JOIN Platform p
+    ON rl.platform_id = p.platform_id
+WHERE p.platform_name = 'Airbnb'
+AND rl.price_period = 'Night'
+GROUP BY c.city_name, rl.room_type
+ORDER BY number_of_listings DESC;

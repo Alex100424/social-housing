@@ -27,7 +27,7 @@ WHERE avg_rent > 1300;
 
 SELECT *
 FROM RentalListing
-WHERE rental_type = 'Long-term';
+WHERE rental_type = 'Short-term';
 
 SELECT *
 FROM RentalListing
