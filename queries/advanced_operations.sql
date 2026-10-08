@@ -119,3 +119,63 @@ WHERE p.platform_name = 'Airbnb'
 AND rl.price_period = 'Night'
 GROUP BY c.city_name, rl.room_type
 ORDER BY number_of_listings DESC;
+
+-- Author: LizardWizard222
+-- Question: How are Airbnb listings split between short stays and stays of a month or longer,
+-- and how do their prices and yearly availability differ?
+-- Relevance to the societal problem: Listings with a minimum stay of 30 nights or more work like
+-- normal monthly rentals. This helps us see how many homes on Airbnb could be rented to local residents.
+USE social_housing;
+SELECT
+    c.city_name,
+    CASE
+        WHEN rl.minimum_nights < 7 THEN '1-6 nights'
+        WHEN rl.minimum_nights < 30 THEN '7-29 nights'
+        ELSE '30+ nights'
+    END AS minimum_stay_band,
+    COUNT(rl.listing_id) AS number_of_listings,
+    ROUND(AVG(rl.price_amount), 2) AS average_nightly_price,
+    ROUND(AVG(rl.availability_365), 0) AS average_days_available_per_year
+FROM RentalListing rl
+JOIN City c
+    ON rl.city_id = c.city_id
+JOIN Platform p
+    ON rl.platform_id = p.platform_id
+WHERE p.platform_name = 'Airbnb'
+AND rl.price_period = 'Night'
+GROUP BY c.city_name, minimum_stay_band
+ORDER BY c.city_name, MIN(rl.minimum_nights);
+
+-- Author: LizardWizard222
+-- Question: In which cities has the average monthly rent grown the most between the earliest
+-- and the latest year we have data for?
+-- Relevance to the societal problem: When rents rise quickly, housing becomes harder to afford.
+-- Ranking cities by how much their rent has grown shows where people are struggling the most,
+-- so these are the cities that need help first, for example rent rules or more social housing.
+
+SELECT
+    c.city_name,
+    ry.first_year,
+    cs_first.avg_rent AS first_year_average_rent,
+    ry.last_year,
+    cs_last.avg_rent AS last_year_average_rent,
+    ROUND((cs_last.avg_rent - cs_first.avg_rent) / cs_first.avg_rent * 100, 2) AS rent_change_percentage
+FROM (
+    SELECT
+        city_id,
+        MIN(year) AS first_year,
+        MAX(year) AS last_year
+    FROM CityStatistics
+    WHERE avg_rent IS NOT NULL
+    GROUP BY city_id
+    HAVING COUNT(*) >= 2
+) ry
+JOIN City c
+    ON ry.city_id = c.city_id
+JOIN CityStatistics cs_first
+    ON ry.city_id = cs_first.city_id
+    AND ry.first_year = cs_first.year
+JOIN CityStatistics cs_last
+    ON ry.city_id = cs_last.city_id
+    AND ry.last_year = cs_last.year
+ORDER BY rent_change_percentage DESC;
