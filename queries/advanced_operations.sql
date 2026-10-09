@@ -179,3 +179,29 @@ JOIN CityStatistics cs_last
     ON ry.city_id = cs_last.city_id
     AND ry.last_year = cs_last.year
 ORDER BY rent_change_percentage DESC;
+
+--made by Ciprian
+--display houses that are currently available, ordered by monthly rent from lowest to highest
+
+SELECT
+    house_id,
+    address,
+    city,
+    monthly_rent,
+    number_of_rooms
+FROM Houses
+WHERE status = 'Available'
+ORDER BY monthly_rent ASC;
+
+--displays applicants who are still waiting for social housing, with the earliest application dates first
+
+SELECT
+    applicant_id,
+    first_name,
+    last_name,
+    application_date,
+    status
+FROM Applicants
+WHERE status = 'Waiting'
+ORDER BY application_date ASC;
+
