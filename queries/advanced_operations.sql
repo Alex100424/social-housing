@@ -181,30 +181,53 @@ JOIN CityStatistics cs_last
 ORDER BY rent_change_percentage DESC;
 
 --made by Ciprian
---display houses that are currently available, ordered by monthly rent from lowest to highest
+--displays Airbnb listings that are currently bookable (available at least one day a year),
+--ordered by nightly price from lowest to highest
 
 SELECT
-    house_id,
-    address,
-    city,
-    monthly_rent,
-    number_of_rooms
-FROM Houses
-WHERE status = 'Available'
-ORDER BY monthly_rent ASC;
+    rl.listing_id,
+    c.city_name,
+    rl.neighbourhood,
+    rl.room_type,
+    rl.price_amount AS nightly_price,
+    rl.minimum_nights,
+    rl.availability_365
+FROM RentalListing rl
+JOIN City c
+    ON rl.city_id = c.city_id
+JOIN Platform p
+    ON rl.platform_id = p.platform_id
+WHERE p.platform_name = 'Airbnb'
+  AND rl.price_period = 'Night'
+  AND rl.availability_365 > 0
+  AND rl.price_amount IS NOT NULL
+ORDER BY rl.price_amount ASC;
 
---displays applicants who are still waiting for social housing, with the earliest application dates first
+
+--made by Ciprian
+--shows the cities with the least social housing relative to their population (latest data per city),
+--together with their average rent, lowest social housing coverage first
 
 SELECT
-    applicant_id,
-    first_name,
-    last_name,
-    application_date,
-    status
-FROM Applicants
-WHERE status = 'Waiting'
-ORDER BY application_date ASC;
-
+    c.city_name,
+    cs.year,
+    cs.population,
+    cs.social_housing_units,
+    ROUND(cs.social_housing_units * 1000.0 / cs.population, 2) AS social_housing_per_1000_residents,
+    cs.avg_rent
+FROM CityStatistics cs
+JOIN City c
+    ON cs.city_id = c.city_id
+WHERE cs.social_housing_units IS NOT NULL
+  AND cs.population IS NOT NULL
+  AND cs.year = (
+        SELECT MAX(cs2.year)
+        FROM CityStatistics cs2
+        WHERE cs2.city_id = cs.city_id
+          AND cs2.social_housing_units IS NOT NULL
+          AND cs2.population IS NOT NULL
+  )
+ORDER BY social_housing_per_1000_residents ASC;
 
 
 -- Author: DamianVolovei
