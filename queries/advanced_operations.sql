@@ -180,10 +180,12 @@ JOIN CityStatistics cs_last
     AND ry.last_year = cs_last.year
 ORDER BY rent_change_percentage DESC;
 
---made by Ciprian
---displays Airbnb listings that are currently bookable (available at least one day a year),
---ordered by nightly price from lowest to highest
-
+-- made by Ciprian
+-- Question: Which Airbnb listings in Barcelona are currently bookable, and what are the cheapest ones?
+-- Relevance to the societal problem: Listings that stay available for much of the year are effectively
+-- run as permanent tourist accommodation instead of a home someone lives in. Seeing how many there are,
+-- and at what nightly price, shows how much housing stock is tied up in the short-term market and what
+-- that costs compared with what local residents pay in rent.
 SELECT
     rl.listing_id,
     c.city_name,
@@ -203,10 +205,12 @@ WHERE p.platform_name = 'Airbnb'
   AND rl.price_amount IS NOT NULL
 ORDER BY rl.price_amount ASC;
 
-
---made by Ciprian
---shows the cities with the least social housing relative to their population (latest data per city),
---together with their average rent, lowest social housing coverage first
+-- made by Ciprian
+-- Question: Which cities have the least social housing relative to their population, and what is their average rent?
+-- Relevance to the societal problem: Social housing is the main safety net for people who cannot afford
+-- market rents. Cities with few social housing units per 1,000 residents, especially where average rent
+-- is also high, are where affordability pressure and the risk of homelessness are likely to be greatest.
+-- This helps show which cities most need more social housing.
 
 SELECT
     c.city_name,
