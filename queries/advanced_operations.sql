@@ -205,3 +205,37 @@ FROM Applicants
 WHERE status = 'Waiting'
 ORDER BY application_date ASC;
 
+
+
+-- Author: DamianVolovei
+-- Question: Show household counts and average monthly rent by city and year (INE data)
+-- Relevance to the societal problem: This helps identify cities and years with higher residential rents,
+-- providing context for housing affordability pressures alongside the number of households.
+
+SELECT c.city_name,
+    cs.year,
+    cs.total_households,
+    cs.avg_rent AS avg_monthly_rent
+FROM CityStatistics cs
+JOIN City c ON cs.city_id = c.city_id
+WHERE cs.total_households IS NOT NULL
+ORDER BY cs.year DESC, cs.avg_rent DESC;
+
+
+-- Author: DamianVolovei
+-- Question: Compare Airbnb nightly prices by neighbourhood and room type in Barcelona.
+-- Relevance to the societal problem: This highlights neighbourhoods where short-term accommodation is most expensive,
+-- supporting further investigation into how tourism-related rentals relate to local housing affordability.
+SELECT r.neighbourhood,
+    r.room_type,
+    COUNT(*) AS number_of_listings,
+    ROUND(AVG(r.price_amount), 2) AS avg_nightly_price
+FROM RentalListing r
+JOIN City c ON r.city_id = c.city_id
+JOIN Platform p ON r.platform_id = p.platform_id
+WHERE c.city_name = 'Barcelona'
+    AND p.platform_name = 'Airbnb'
+    AND r.price_period = 'Night'
+    AND r.price_amount IS NOT NULL
+GROUP BY r.neighbourhood, r.room_type
+ORDER BY avg_nightly_price DESC;
